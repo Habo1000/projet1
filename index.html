@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galerie Unsplash</title>
+    <link rel="stylesheet" href="src/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/5a051642f6.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="src/main.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🖼️ Galerie Photo</h1>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Rechercher des photos..."
+        />
+        <button id="searchBtn">Rechercher</button>
+        <button id="randBtn">Aleatoire</button>
+        <select name="" id="perPage">
+          <option value="10">10 par page</option>
+          <option value="20">20 par page</option>
+          <option value="30">30 par page</option>
+        </select>
+        <button id="bookmarkBtn">Favoris</button>
+      </div>
+
+      <div class="num-res"></div>
+      <div class="no-res hidden">Aucun résultat</div>
+
+      <div id="gallery" class="gallery">
+        <!-- Les photos apparaîtront ici -->
+      </div>
+      <div id="loader" class="loader hidden">Chargement...</div>
+    </div>
+  </body>
+</html>
