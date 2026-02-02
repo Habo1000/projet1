@@ -1,4 +1,3 @@
-import "../style.css";
 import {
   handleSearch,
   randSrch,
@@ -7,8 +6,11 @@ import {
   setNumPerPage,
 } from "./handlers/handle.js";
 import { filterBookmarks } from "./displayers/display.js";
+import 'dotenv/config'
 
-//const SECRET_KEY_API = "Hs3FIR6rSZh_i7U4yr_RvGW1kiJcrvkQiRYwTErEBKY";
+
+import "../style.css";
+
 
 const sendBtn = document.querySelector("#searchBtn");
 const randBtn = document.querySelector("#randBtn");

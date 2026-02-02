@@ -1,8 +1,6 @@
-export { handleSearch, randSrch };
-export const queryInput = document.querySelector("#searchInput");
+import axios from 'axios'
 import { displayGallery, numRes } from "../displayers/display";
 
-const ACCESS_KEY_API = "NtDrTB1330s8JArzBKQG462TMuWN74hcnPUxWh0FIFc";
 const URL_UNSPLASH = "https://api.unsplash.com";
 
 let results;
@@ -81,3 +79,6 @@ async function randSrch() {
     }
   }
 }
+
+export { handleSearch, randSrch };
+export const queryInput = document.querySelector("#searchInput");
