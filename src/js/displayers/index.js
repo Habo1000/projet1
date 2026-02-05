@@ -1,16 +1,22 @@
-export { displayGallery, displayFavorites, filterBookmarks };
-export const numRes = document.querySelector(".num-res");
-import { setLocalStorage, getLocalStorage } from "../utils/localstorage.js";
-import { queryInput } from "../handlers/handle.js";
+import {
+  setLocalStorage,
+  getLocalStorage,
+  findInLocalStorage,
+} from "../utils/localstorage.js";
 const gallery = document.querySelector("#gallery");
 const loader = document.querySelector("#loader");
-const noRes = document.querySelector(".no-res");
+const trashButton = document.querySelector("#trashButton");
 
 let tabIdUrl = [];
 
-function displayGallery(results) {
+function displayGallery(results, onFavorites = false) {
   console.log(results);
 
+  if (onFavorites) {
+    trashButton.classList.remove("hidden");
+  } else {
+    trashButton.classList.add("hidden");
+  }
   loader.classList.add("hidden");
   gallery.innerHTML = "";
   // queryInput.value = "";
@@ -27,20 +33,27 @@ function displayGallery(results) {
 
       let image = document.createElement("img");
       // console.log(element);
-
-      image.src = element.urls.small;
+      const imageUrl = onFavorites ? element.url : element.urls.small;
+      image.src = imageUrl;
       image.id = element.id;
-      image.alt = element.alt_description;
+      //image.alt = element.alt_description;
 
       let bookmarkIcon = document.createElement("i");
       bookmarkIcon.className = "fa-solid fa-bookmark bookmark-icon";
+
+      if (findInLocalStorage(element.id)) {
+        console.log("hello");
+
+        photoCard.classList.toggle("bookmarked");
+      }
+
       image.addEventListener("click", () => {
         // console.log("toggle");
 
         photoCard.classList.toggle("bookmarked");
 
         if (photoCard.classList.contains("bookmarked")) {
-          tabIdUrl.push({ id: element.id, url: element.urls.small });
+          tabIdUrl.push({ id: element.id, url: imageUrl });
         } else {
           tabIdUrl = tabIdUrl.filter((idUrl) => idUrl.id !== element.id);
         }
@@ -54,32 +67,15 @@ function displayGallery(results) {
   }
 }
 
-function displayFavorites(res) {
-  console.log(res);
-
-  gallery.innerHTML = "";
-  if (!res.length) {
-    noRes.classList.remove("hidden");
-  } else {
-    numRes.innerHTML = `${res.length} favoris`;
-    res.forEach((element) => {
-      let photoCard = document.createElement("div");
-      photoCard.className = "photo-card bookmarked";
-      let image = document.createElement("img");
-      image.src = element.url;
-      image.id = element.id;
-      // image.alt = element.alt_description;
-      let bookmarkIcon = document.createElement("i");
-      bookmarkIcon.className = "fa-solid fa-bookmark bookmark-icon";
-
-      photoCard.appendChild(bookmarkIcon);
-      photoCard.appendChild(image);
-      gallery.appendChild(photoCard);
-    });
-  }
-}
-
 function filterBookmarks() {
   const getBookMarks = getLocalStorage("bookmarks");
-  displayFavorites(getBookMarks);
+  displayGallery(getBookMarks, true);
 }
+
+trashButton.addEventListener("click", () => {
+  filterBookmarks();
+});
+
+export { displayGallery, filterBookmarks };
+export const numRes = document.querySelector(".num-res");
+export const noRes = document.querySelector(".no-res");

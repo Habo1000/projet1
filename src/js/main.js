@@ -1,18 +1,16 @@
-import "../style.css";
+import "../styles/style.css";
 import {
   handleSearch,
   randSrch,
   queryInput,
   onRandSrch,
   setNumPerPage,
-} from "./handlers/handle.js";
-import { filterBookmarks } from "./displayers/display.js";
-
-//const SECRET_KEY_API = "Hs3FIR6rSZh_i7U4yr_RvGW1kiJcrvkQiRYwTErEBKY";
+} from "./handlers/index.js";
+import { filterBookmarks } from "./displayers/index.js";
 
 const sendBtn = document.querySelector("#searchBtn");
 const randBtn = document.querySelector("#randBtn");
-
+const trashButton = document.querySelector("#trashButton");
 const perPage = document.querySelector("#perPage");
 const bookmarkFilterBtn = document.querySelector("#bookmarkBtn");
 
