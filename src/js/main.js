@@ -5,12 +5,11 @@ import {
   queryInput,
   onRandSrch,
   setNumPerPage,
-} from "./handlers/index.js";
-import { filterBookmarks } from "./displayers/index.js";
+} from "./unsplash-requests.js";
+import { filterBookmarks } from "./display.js";
 
 const sendBtn = document.querySelector("#searchBtn");
 const randBtn = document.querySelector("#randBtn");
-const trashButton = document.querySelector("#trashButton");
 const perPage = document.querySelector("#perPage");
 const bookmarkFilterBtn = document.querySelector("#bookmarkBtn");
 

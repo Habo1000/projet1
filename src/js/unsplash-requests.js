@@ -1,4 +1,4 @@
-import { displayGallery, numRes, noRes } from "../displayers/index.js";
+import { displayGallery, numRes, noRes } from "./display.js";
 import axios from "axios";
 // import "dotenv/config";
 

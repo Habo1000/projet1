@@ -1,15 +1,16 @@
 import {
-  setLocalStorage,
-  getLocalStorage,
-  findInLocalStorage,
-} from "../utils/localstorage.js";
+  setSupabaseStorage,
+  getSupabaseStorage,
+  findInSupabaseStorage,
+} from "./utils/supabase/index.js";
 const gallery = document.querySelector("#gallery");
 const loader = document.querySelector("#loader");
 const trashButton = document.querySelector("#trashButton");
 
-let tabIdUrl = [];
+let tabIdUrl = (await getSupabaseStorage()) || [];
+console.log("tabIdURL:", tabIdUrl);
 
-function displayGallery(results, onFavorites = false) {
+async function displayGallery(results, onFavorites = false) {
   console.log(results);
 
   if (onFavorites) {
@@ -27,13 +28,16 @@ function displayGallery(results, onFavorites = false) {
     numRes.innerHTML = `${results.length} résultats apparus`;
     noRes.classList.add("hidden");
 
-    results.forEach((element) => {
+    results.forEach(async (element) => {
       let photoCard = document.createElement("div");
       photoCard.className = "photo-card";
 
       let image = document.createElement("img");
       // console.log(element);
       const imageUrl = onFavorites ? element.url : element.urls.small;
+      const imageAlt = onFavorites
+        ? element.description
+        : element.alt_description;
       image.src = imageUrl;
       image.id = element.id;
       //image.alt = element.alt_description;
@@ -41,23 +45,26 @@ function displayGallery(results, onFavorites = false) {
       let bookmarkIcon = document.createElement("i");
       bookmarkIcon.className = "fa-solid fa-bookmark bookmark-icon";
 
-      if (findInLocalStorage(element.id)) {
-        console.log("hello");
-
+      if (await findInSupabaseStorage(element.id)) {
         photoCard.classList.toggle("bookmarked");
       }
 
-      image.addEventListener("click", () => {
+      image.addEventListener("click", async () => {
         // console.log("toggle");
 
         photoCard.classList.toggle("bookmarked");
 
         if (photoCard.classList.contains("bookmarked")) {
-          tabIdUrl.push({ id: element.id, url: imageUrl });
+          console.log("added bookmark");
+
+          tabIdUrl.push({ id: element.id, url: imageUrl, alt: imageAlt });
         } else {
+          console.log("removed bookmark, ancien ", tabIdUrl);
+
           tabIdUrl = tabIdUrl.filter((idUrl) => idUrl.id !== element.id);
+          console.log("new bookmark list : ", tabIdUrl);
         }
-        setLocalStorage(tabIdUrl);
+        await setSupabaseStorage(tabIdUrl);
       });
 
       photoCard.appendChild(bookmarkIcon);
@@ -67,14 +74,12 @@ function displayGallery(results, onFavorites = false) {
   }
 }
 
-function filterBookmarks() {
-  const getBookMarks = getLocalStorage("bookmarks");
+async function filterBookmarks() {
+  const getBookMarks = await getSupabaseStorage();
   displayGallery(getBookMarks, true);
 }
 
-trashButton.addEventListener("click", () => {
-  filterBookmarks();
-});
+trashButton.addEventListener("click", filterBookmarks);
 
 export { displayGallery, filterBookmarks };
 export const numRes = document.querySelector(".num-res");
